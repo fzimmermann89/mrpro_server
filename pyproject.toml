@@ -1,0 +1,91 @@
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta:__legacy__"
+
+[project]
+name = "mrpro_server"
+description = "MRpro Open Recon Server"
+requires-python = ">=3.11,<3.14"
+version = "0.250100"
+authors = [
+    { name = "MRpro Team", email = "info@emerpro.de" },
+    { name = "Felix Zimmermann", email = "felix.zimmermann@ptb.de" },
+]
+keywords = ["MRI", "opensrecon", "mrpro"]
+classifiers = [
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3 :: Only",
+]
+
+dependencies = [
+    "numpy>=1.23, <2.0",
+    "torch>=2.3",
+    "ismrmrd>=1.14.1",
+    "mrpro>=0.250100",
+]
+
+[tool.mypy]
+warn_return_any = false
+check_untyped_defs = true
+warn_no_return = true
+warn_unreachable = true
+exclude = ["docs"]
+enable_error_code = ["ignore-without-code"]
+warn_unused_ignores = true
+
+
+[[tool.mypy.overrides]]
+module = ["ismrmrd.*", "h5py", "scipy.*"]
+ignore_missing_imports = true
+
+[tool.ruff]
+line-length = 130
+
+[tool.ruff.lint]
+select = [
+    "A",   # flake8-builtins
+    "B",   # flake8-bugbear
+    "C4",  # flake8-comprehensions
+    "COM", # flake8-commas
+    "E",   # pycodestyle errors
+    "F",   # Pyflakes
+    "FA",  # flake8-future-annotations
+    "I",   # isort
+    "N",   # pep8-naming
+    "NPY", # NumPy-specific rules
+    "RUF", # Ruff-specific rules
+    "S",   # flake8-bandit
+    "SIM", # flake8-simplify
+    "UP",  # pyupgrade
+    "PIE", # flake8-pie
+    # "PL",  # PyLint
+    "PTH", # flake8-use-pathlib
+    "T20", # flake8-print
+    "Q",   # flake8-quotes
+    "W",   # pycodestyle warnings
+    "YTT", # flake8-2020
+    "ERA", # flake8-eradicate
+]
+ignore = [
+    "N999",   #  invalid module name
+    "COM812", #  missing-trailing-comma (conflict with formatter)
+    "SIM108", #  if-else-block-instead-of-if-exp
+]
+
+[tool.ruff.lint.isort]
+force-single-line = false
+split-on-trailing-comma = false
+
+[tool.ruff.lint.flake8-quotes]
+docstring-quotes = "double"
+inline-quotes = "double"
+
+[tool.ruff.lint.pydocstyle]
+convention = "numpy"
+
+[tool.ruff.format]
+quote-style = "double"
+skip-magic-trailing-comma = false
