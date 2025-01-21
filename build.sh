@@ -27,6 +27,6 @@ docker save mrpro_server -o "$TMP_DIR/$name.tar"
 
 echo "Creating $name.zip"
 cp info.pdf "$TMP_DIR/$name.pdf"
-zip -9 - "$TMP_DIR/$name.tar" "$TMP_DIR/$name.pdf" -j > "$name.zip"
+zip - "$TMP_DIR/$name.tar" "$TMP_DIR/$name.pdf" -j > "$name.zip"
 
 rm -rf "$TMP_DIR"
