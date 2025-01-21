@@ -29,7 +29,7 @@ LABEL org.opencontainers.image.description="MRpro Open Recon"
 LABEL org.opencontainers.image.url="https://github.com/PTB-MR/mrpro"
 LABEL org.opencontainers.image.version=${VERSION}
 LABEL org.opencontainers.image.authors="PTB"
-LABEL com.siemens-healthineers.magneticresonance.OpenRecon.metadata:1.1.0=$(CONFIG)
+LABEL com.siemens-healthineers.magneticresonance.OpenRecon.metadata:1.1.0=${CONFIG}
 
 CMD ["python3", "/home/mrpro_server/server.py"]
 
