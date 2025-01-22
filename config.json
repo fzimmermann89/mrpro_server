@@ -1,9 +1,9 @@
 {
   "general": {
     "name": {
-      "en": "MRpro"
+      "en": "mrpro"
     },
-    "version": "0.250100.0",
+    "version": "25.01.22",
     "vendor": "PTB",
     "information": {
       "en": "MRpro reconstruction."
@@ -11,15 +11,15 @@
     "id": "mrpro",
     "regulatory_information": {
       "device_trade_name": "mrpro",
-      "production_identifier": "0.250100.0",
+      "production_identifier": "25.01.22",
       "manufacturer_address": "Berlin, Germany",
       "made_in": "DE",
-      "manufacture_date": "2025/01/01",
-      "material_number": "mrpro_0_250100_0",
-      "gtin": "00000000000000",
-      "udi": "(00)00000000000000(00)0.0.0",
+      "manufacture_date": "2025/01/22",
+      "material_number": "mrpro_25_01_00",
+      "gtin": "00860000171212",
+      "udi": "(01)00860000171212(21)1.3.0",
       "safety_advices": "",
-      "special_operating_instructions": "Demo Python MRpro MRD server supporting Non Cartesian raw to complex image workflow",
+      "special_operating_instructions": "Demo Python MRpro MRD server",
       "additional_relevant_information": ""
     }
   },
@@ -32,9 +32,9 @@
     "emitter": "raw",
     "injector": "compleximage",
     "can_process_adjustment_data": false,
-    "can_use_gpu": true,
+    "can_use_gpu": false,
     "min_count_required_gpus": 0,
-    "min_required_gpu_memory": 0,
+    "min_required_gpu_memory": 2048,
     "min_required_memory": 4096,
     "min_count_required_cpu_cores": 1,
     "content_qualification_type": "RESEARCH"
