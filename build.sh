@@ -1,32 +1,43 @@
-#!/bin/sh
-set -e
+#!/bin/bash
+set -euo pipefail
+
+error_handler() {
+    echo "Error occurred on line $BASH_LINENO while executing: $BASH_COMMAND"
+    exit 1
+}
+trap error_handler ERR
 
 TMP_DIR=$(mktemp -d)
 trap 'rm -rf "$TMP_DIR"' EXIT
 
+for file in config.json info.pdf; do
+    if [ ! -f "$file" ]; then
+        echo "Error: $file not found."
+        exit 1
+    fi
+done
 
-if [ ! -f config.json ]; then
-    echo "Error: config.json not found"
-    exit 1
-fi
-
-if [ ! -f info.pdf ]; then
-    echo "Error: info.pdf not found"
-    exit 1
-fi
-
-config=$(base64 config.json | tr -d '\n')
+config=$(base64 -w 0 config.json)
 name=$(jq -r '"OpenRecon_\(.general.vendor)_\(.general.name.en)_V\(.general.version)"' config.json)
 version=$(jq -r '.general.version' config.json)
+tag="${name,,}"
 
-echo "Building docker image"
-docker build mrpro_server -f Dockerfile -t mrpro_server --build-arg CONFIG="$config" --build-arg VERSION="$version"
+echo "Getting latest mrpro version"
+latest_mrpro_version=$(curl -fsSL https://pypi.org/pypi/mrpro/json | jq -r '.info.version')
+echo "Latest mrpro version: $latest_mrpro_version"
 
-echo "Saving docker image to $TMP_DIR/$name.tar"
-docker save mrpro_server -o "$TMP_DIR/$name.tar"
+echo "Building Docker image"
+docker build mrpro_server \
+    -f Dockerfile \
+    -t "$tag" \
+    --build-arg CONFIG="$config" \
+    --build-arg VERSION="$version" \
+    --build-arg MRPRO_VERSION="$latest_mrpro_version"
 
-echo "Creating $name.zip"
+echo "Saving Docker image"
+docker save "$tag" -o "$TMP_DIR/$name.tar"
+
+echo "Creating archive"
 cp info.pdf "$TMP_DIR/$name.pdf"
 zip - "$TMP_DIR/$name.tar" "$TMP_DIR/$name.pdf" -j > "$name.zip"
-
-rm -rf "$TMP_DIR"
+echo "Archive created: $name.zip"
