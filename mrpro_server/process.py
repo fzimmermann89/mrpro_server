@@ -9,14 +9,21 @@ import mrpro
 import torch
 
 
-def process(acqs: Sequence[ismrmrd.Acquisition], config: dict, metadata: str) -> list[ismrmrd.Image]:
+def process(
+    acquisitions: Sequence[ismrmrd.Acquisition],
+    config: dict,
+    metadata: str,
+    images: list[ismrmrd.Image],
+    waveforms: list[ismrmrd.Waveform],
+) -> list[ismrmrd.Image]:
     """Process ISMRMRD Acquisitions to ISMRMRD Images."""
+
     with tempfile.TemporaryDirectory() as tmpdir:
-        file = tmpdir + "/data.mrd"
         # TODO: create KData directly from ISMRMRD Acquisitions
+        file = tmpdir + "/data.mrd"
         with ismrmrd.Dataset(file) as dset:
             dset.write_xml_header(metadata)
-            for acq in acqs:
+            for acq in acquisitions:
                 dset.append_acquisition(acq)
         logging.info("KData written to %s", file)
 
@@ -30,12 +37,12 @@ def process(acqs: Sequence[ismrmrd.Acquisition], config: dict, metadata: str) ->
         ##################################################
 
         # TODO: creae ISMRMRD Image from IData
-        data = kdata.data.detach().to(torch.complex64).cpu().flatten(end_dim=-5).numpy()
+        data = image.data.detach().to(torch.complex64).cpu().flatten(end_dim=-5).numpy()
         fov = kdata.header.recon_fov.apply(mrpro.utils.unit_conversion.m_to_mm)
         images = []
         for i, current_data in enumerate(data):
             ismrmrd_image = ismrmrd.Image.from_array(
-                current_data, acquisition=acqs[0], transpose=False, field_of_view=(fov.x, fov.y, fov.z)
+                current_data, acquisition=acquisitions[0], transpose=False, field_of_view=(fov.x, fov.y, fov.z)
             )
             meta = ismrmrd.Meta(
                 {
