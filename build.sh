@@ -19,8 +19,9 @@ done
 
 config=$(base64 -w 0 config.json)
 name=$(jq -r '"OpenRecon_\(.general.vendor)_\(.general.name.en)_V\(.general.version)"' config.json)
+tag=$(jq -r '"openrecon_\(.general.vendor | ascii_downcase)_\(.general.name.en | ascii_downcase):v\(.general.version)"' config.json)
 version=$(jq -r '.general.version' config.json)
-tag="${name,,}"
+
 
 echo "Getting latest mrpro version"
 latest_mrpro_version=$(curl -fsSL https://pypi.org/pypi/mrpro/json | jq -r '.info.version')
