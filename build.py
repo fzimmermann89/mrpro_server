@@ -113,7 +113,7 @@ def main() -> None:
     print(f"Archive created: {name}.zip")
 
     print("Copying to mars")
-    subprocess.run(["scp", "f{name}.zip", "mars:/opt/medcom/openrecon_incomin"])
+    subprocess.run(["scp", f"{name}.zip", "mars:/opt/medcom/openrecon_incomin"])
 
 
 if __name__ == "__main__":

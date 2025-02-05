@@ -6,12 +6,12 @@ build-backend = "setuptools.build_meta:__legacy__"
 name = "mrpro_server"
 description = "MRpro Open Recon Server"
 requires-python = ">=3.11,<3.14"
-version = "0.250100"
+version = "0.1"
 authors = [
     { name = "MRpro Team", email = "info@emerpro.de" },
     { name = "Felix Zimmermann", email = "felix.zimmermann@ptb.de" },
 ]
-keywords = ["MRI", "opensrecon", "mrpro"]
+keywords = ["MRI", "openrecon", "mrpro"]
 classifiers = [
     "License :: OSI Approved :: Apache Software License",
     "Programming Language :: Python",
