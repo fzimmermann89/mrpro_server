@@ -1,6 +1,7 @@
 # Openrecon MRpro Server
 
-Basic docker image for an openrecon image using [MRpro](https://github.com/PTB-MR/mrpro) for MRI image reconstruction
+Basic docker image for an openrecon image using [MRpro](https://github.com/PTB-MR/mrpro) for MRI image reconstruction.
+This can be run on Siemens MRI scanners with openrecon enabled.
 
 ## Build requirements
 
