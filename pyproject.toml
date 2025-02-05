@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta:__legacy__"
 [project]
 name = "mrpro_server"
 description = "MRpro Open Recon Server"
-requires-python = ">=3.11,<3.14"
+requires-python = ">=3.10,<3.14"
 version = "0.1"
 authors = [
     { name = "MRpro Team", email = "info@emerpro.de" },
@@ -15,17 +15,13 @@ keywords = ["MRI", "openrecon", "mrpro"]
 classifiers = [
     "License :: OSI Approved :: Apache Software License",
     "Programming Language :: Python",
+    "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3 :: Only",
 ]
 
-dependencies = [
-    "numpy>=1.23, <2.0",
-    "torch>=2.3",
-    "ismrmrd>=1.14.1",
-    "mrpro>=0.250100",
-]
+dependencies = ["jsonschema", "requests", "jinja2"]
 
 [tool.mypy]
 warn_return_any = false
