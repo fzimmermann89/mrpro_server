@@ -5,8 +5,6 @@ import socket
 import socketserver
 import sys
 
-from sympy import O
-
 import constants
 import ismrmrd
 import process
@@ -64,15 +62,14 @@ class Server(socketserver.BaseRequestHandler):
                     case constants.MRD_MESSAGE_TEXT:
                         logging.info("Received MRD_MESSAGE_TEXT")
                         config = json.loads(self.read_string())["parameters"]
-                        logging.debug("Config: %s", config)
+                        logging.debug(f"Config: {config!s}")
 
                     case constants.MRD_MESSAGE_METADATA_XML_TEXT:
                         logging.info("Received MRD_MESSAGE_METADATA_XML_TEXT")
                         metadata = self.read_string()
-                        logging.debug("XML Metadata: %s", metadata)
+                        logging.debug(f"XML Metadata: {metadata!s}")
 
                     case constants.MRD_MESSAGE_ISMRMRD_ACQUISITION:
-                        logging.info("Received MRD_MESSAGE_ISMRMRD_ACQUISITION")
                         acq = ismrmrd.Acquisition.deserialize_from(self.read)
                         acquisitions.append(acq)
 
@@ -84,6 +81,7 @@ class Server(socketserver.BaseRequestHandler):
                     case constants.MRD_MESSAGE_ISMRMRD_IMAGE:
                         logging.info("Received MRD_MESSAGE_ISMRMRD_IMAGE")
                         image = ismrmrd.Image.deserialize_from(self.read)
+                        logging.debug(f"Image: {image!s}")
                         images.append(image)
 
                     case constants.MRD_MESSAGE_CONFIG_TEXT:
@@ -95,6 +93,7 @@ class Server(socketserver.BaseRequestHandler):
                         _ = self.read(constants.SIZEOF_MRD_MESSAGE_CONFIGURATION_FILE)
 
                     case constants.MRD_MESSAGE_CLOSE:
+                        logging.info(f"Received {len(images)} images, {len(acquisitions)} acquisitions, {len(waveforms)} waveforms ")
                         logging.info("Received MRD_MESSAGE_CLOSE. Processing data...")
                         images = process.process(acquisitions, config, metadata, images, waveforms)
                         logging.info("Done Processing.")
@@ -103,18 +102,19 @@ class Server(socketserver.BaseRequestHandler):
                             logging.info("Sending Image")
                             self.request.sendall(constants.MrdMessageIdentifier.pack(constants.MRD_MESSAGE_ISMRMRD_IMAGE))
                             image.serialize_into(self.request.sendall)
+                            logging.debug(f"Image: {image!s}")
 
                         logging.info("Sending MRD_MESSAGE_CLOSE")
                         self.request.sendall(constants.MrdMessageIdentifier.pack(constants.MRD_MESSAGE_CLOSE))
                         break
 
                     case _:
-                        logging.warning("Received unsupported message identifier: %d", identifier)
+                        logging.warning(f"Received unsupported message identifier: {identifier}")
 
             logging.info("Closing connection")
 
         except Exception as e:
-            logging.exception("Error handling connection: %s", e)
+            logging.exception(f"Error handling connection: {e!s}")
 
         finally:
             logging.info("Closing connection")
@@ -134,11 +134,11 @@ def main() -> None:
 
     # watchdog timer to exit if the server hangs
     signal.signal(signal.SIGALRM, watchdog)
-    signal.alarm(120)
+    signal.alarm(600)
 
     logging.basicConfig(level=logging.DEBUG, handlers=[logging.StreamHandler(sys.stdout)])
 
-    with socketserver.TCPServer(("0.0.0.0", 9002), Server) as server:  # noqa	S104
+    with socketserver.TCPServer(("0.0.0.0", 9002), Server) as server:
         logging.info("Starting server...")
         server.serve_forever()
 

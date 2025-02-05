@@ -1,0 +1,25 @@
+{
+    "name": "MRpro-RSS",
+    "version": "1.{{ mrpro_minor }}.1",
+    "vendor": "PTB",
+    "information": "MRpro RSS reconstruction",
+    "can_process_adjustment_data": false,
+    "can_use_gpu": false,
+    "min_count_required_gpus": 0,
+    "min_required_gpu_memory": 0,
+    "min_required_memory": 65536,
+    "min_count_required_cpu_cores": 1,
+    "ui": [
+        {
+            "id": "comment",
+            "label": {
+                "en": "Image Comment"
+            },
+            "type": "string",
+            "information": {
+                "en": "Comment added to DICOM ImageComment"
+            },
+            "default": "MRpro rocks!"
+        }
+    ]
+}
