@@ -1,8 +1,8 @@
 {
-    "name": "MRpro-RSS",
+    "name": "MRpro-MRF",
     "version": "1.{{ mrpro_minor }}.1",
     "vendor": "PTB",
-    "information": "MRpro RSS reconstruction",
+    "information": "MRpro MRF reconstruction",
     "can_process_adjustment_data": false,
     "can_use_gpu": false,
     "min_count_required_gpus": 0,
